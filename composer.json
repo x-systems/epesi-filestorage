@@ -1,0 +1,45 @@
+{
+	"name" : "epesi/filestorage",
+	"description" : "Epesi CRM / ERP file storage module",
+	"keywords" : [
+		"epesi",
+		"laravel",
+		"crm",
+		"erp",
+		"composer",
+		"package",
+		"file storage"
+	],
+	"license" : "MIT",
+	"authors" : [{
+			"name" : "Georgi Hristov",
+			"email" : "info@xsystems.io"
+		}
+	],
+	"type" : "project",
+	"require" : {
+		"php" : ">=7.2",
+		"epesi/core" : "master-dev"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "^8.0",
+		"orchestra/testbench": "^3.8"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Epesi\\FileStorage\\" : "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Epesi\\FileStorage\\Tests\\": "tests/"
+		}
+	},
+	"extra" : {
+		"epesi" : {
+			"modules" : {
+				"Epesi\\FileStorage\\" : "src/"
+			}		
+		}
+	}
+}
