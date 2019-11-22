@@ -15,7 +15,7 @@ class CreateFilestorageTables extends Migration
     {
     	$this->down();
     	
-        Schema::create('filestorage_files', function (Blueprint $table) {
+        Schema::create('filestorage_contents', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('hash', 128);
             $table->integer('size');
@@ -24,43 +24,43 @@ class CreateFilestorageTables extends Migration
             $table->softDeletes();
         });
         
-        Schema::create('filestorage_meta', function (Blueprint $table) {
+        Schema::create('filestorage_files', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 256);
             $table->string('link', 128)->nullable();
             $table->string('backref', 128)->nullable();
-            $table->unsignedBigInteger('file_id');
+            $table->unsignedBigInteger('content_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
             
             $table->softDeletes();
             
-            $table->foreign('file_id')->references('id')->on('filestorage_files');
+            $table->foreign('content_id')->references('id')->on('filestorage_contents');
             $table->foreign('created_by')->references('id')->on('users');
         });
         
-        Schema::create('filestorage_remote', function (Blueprint $table) {
+        Schema::create('filestorage_remote_access', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('meta_id');            
+            $table->unsignedBigInteger('file_id');            
             $table->string('token', 128);
             $table->unsignedBigInteger('created_by');
             $table->timestamp('expires_at');
             $table->timestamps();
             
-            $table->foreign('meta_id')->references('id')->on('filestorage_meta');
+            $table->foreign('file_id')->references('id')->on('filestorage_files');
             $table->foreign('created_by')->references('id')->on('users');
         });
         
         Schema::create('filestorage_access_log', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('meta_id');            
+            $table->unsignedBigInteger('file_id');            
             $table->timestamp('accessed_at');
             $table->unsignedBigInteger('accessed_by');
-            $table->string('type', 32);
+            $table->string('action', 32);
             $table->string('ip_address', 32);
             $table->string('host_name', 64);
                         
-            $table->foreign('meta_id')->references('id')->on('filestorage_meta');
+            $table->foreign('file_id')->references('id')->on('filestorage_files');
         });
     }
 
@@ -71,9 +71,9 @@ class CreateFilestorageTables extends Migration
      */
     public function down()
     {
-    	Schema::dropIfExists('filestorage_remote');
+    	Schema::dropIfExists('filestorage_remote_access');
     	Schema::dropIfExists('filestorage_access_log');
-    	Schema::dropIfExists('filestorage_meta');
-        Schema::dropIfExists('filestorage_files');
+    	Schema::dropIfExists('filestorage_files');
+        Schema::dropIfExists('filestorage_contents');
     }
 }

@@ -10,7 +10,7 @@ class FileStorageController extends Controller
     public function get(Request $request)
     {
     	try {
-    		$meta = Database\Models\Meta::get($request->get('id'));
+    		$file = Database\Models\File::get($request->get('id'));
     	} catch (\Exception $e) {
     		abort(404);
     	}
@@ -28,17 +28,17 @@ class FileStorageController extends Controller
     			break;
     	}
 
-    	if ($useThumbnail && $request->get('thumbnail', 1) && ($thumbnail = $meta->thumbnail)) {
+    	if ($useThumbnail && $request->get('thumbnail', 1) && ($thumbnail = $file->thumbnail)) {
     		$mime = $thumbnail['mime'];
     		$filename = $thumbnail['name'];
     		$contents = $thumbnail['contents'];
     	}
     	else {
-    		$mime = $meta->file->type;
-    		$filename = $meta->name;
-    		$contents = $meta->file->contents;
+    		$mime = $file->content->type;
+    		$filename = $file->name;
+    		$contents = $file->content->data;
     	}
-
+    	
     	$headers = [
     			'Content-Type' => $mime,
     			'Content-Length' => strlen($contents),

@@ -19,12 +19,12 @@ class FileStorageAccess
     	return response('No access to file', 401);
     }
         
-    protected function logFileAccess($metaId, $action, $time = null)
+    protected function logFileAccess($fileId, $action, $time = null)
     {
     	$ip_address = request()->ip();
 
-    	Database\Models\AccessLog::create([
-    			'meta_id' => $metaId,
+    	Database\Models\FileAccessLog::create([
+    			'file_id' => $fileId,
     			'accessed_at' => date('Y-m-d H:i:s', $time ?: time()),
     			'accessed_by' => Auth::id() ?: 0,
     			'action' => $action,

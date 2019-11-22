@@ -2,7 +2,7 @@
 
 namespace Epesi\FileStorage\Integration;
 
-use Epesi\FileStorage\Database\Models\Remote;
+use Epesi\FileStorage\Database\Models\FileRemoteAccess;
 
 class RemoteFileStorageAccess extends Joints\FileStorageAccessJoint
 {
@@ -12,6 +12,6 @@ class RemoteFileStorageAccess extends Joints\FileStorageAccessJoint
 	
 	protected function hasAccess($request)
 	{
-		return Remote::access($request->get('id'), $request->get('token'));
+		return FileRemoteAccess::check($request->get('id'), $request->get('token'));
 	}
 }

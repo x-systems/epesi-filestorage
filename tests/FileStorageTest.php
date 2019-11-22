@@ -4,15 +4,15 @@ namespace Epesi\FileStorage\Tests;
 
 use Orchestra\Testbench\TestCase;
 use Epesi\FileStorage\Database\Models\File;
-use Epesi\FileStorage\Database\Models\Meta;
 use Epesi\FileStorage\Integration\LocalFileStorageAccess;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Epesi\Core\System\User\Database\Models\User;
 use Epesi\Core\System\Integration\Modules\ModuleJoint;
 use Epesi\FileStorage\FileStorageCore;
 use Epesi\FileStorage\Integration\RemoteFileStorageAccess;
-use Epesi\FileStorage\Database\Models\Remote;
-use Epesi\FileStorage\Database\Models\AccessLog;
+use Epesi\FileStorage\Database\Models\FileAccessLog;
+use Epesi\FileStorage\Database\Models\FileRemoteAccess;
+use Epesi\FileStorage\Database\Models\FileContent;
 
 class FileStorageTest extends TestCase
 {
@@ -41,80 +41,82 @@ class FileStorageTest extends TestCase
 		FileStorageCore::boot();
 	}
 	
-    public function testFileStorage()
+    public function testContentStorage()
     {
     	$testFile = reset($this->testFiles);
     	
-    	$fileId = File::putDataFromFile($testFile);
+    	$fileId = FileContent::putFromFile($testFile);
     	
     	$this->assertNotEmpty($fileId, 'File details not stored in database');
     	
-    	$savedFile = File::find($fileId);
+    	$savedFileContent = FileContent::find($fileId);
     	
-    	$this->assertEquals(File::hashContent(file_get_contents($testFile)), $savedFile->hash, 'File hash not stored correctly in database');
+    	$this->assertEquals(FileContent::hash(file_get_contents($testFile)), $savedFileContent->hash, 'File hash not stored correctly in database');
     	
-    	$this->assertEquals(filesize($testFile), $savedFile->size, 'File size not stored correctly in database');
+    	$this->assertEquals(filesize($testFile), $savedFileContent->size, 'File size not stored correctly in database');
 
-    	$this->assertEquals(\Illuminate\Support\Facades\File::mimeType($testFile), $savedFile->type, 'File mime type not stored correctly in database');
+    	$this->assertEquals(\Illuminate\Support\Facades\File::mimeType($testFile), $savedFileContent->type, 'File mime type not stored correctly in database');
 
-    	$this->assertFileExists($savedFile->path, 'File not copied to the storage location');
+    	$this->assertFileExists($savedFileContent->path, 'File not copied to the storage location');
     	
-    	$this->assertEquals(file_get_contents($testFile), $savedFile->contents, 'File contents not stored or retrieved correctly!');
+    	$this->assertEquals(file_get_contents($testFile), $savedFileContent->data, 'File contents not stored or retrieved correctly!');
     }   
     
-    public function testMetaAddFiles()
+    public function testFileStorage()
     {
-    	$ids = Meta::putMany($this->testFiles);
+    	$ids = File::putMany($this->testFiles);
     	
     	$id = reset($ids);
     	
-    	$meta = Meta::get($id);
+    	$file = File::get($id);
 
-    	$this->assertEquals(basename(reset($this->testFiles)), $meta->name, 'File name not stored correctly!');
+    	$this->assertEquals(basename(reset($this->testFiles)), $file->name, 'File name not stored correctly!');
     	
-    	$this->assertFileExists($meta->file->path, 'File name not stored correctly!');
+    	$this->assertFileExists($file->content->path, 'File name not stored correctly!');
     	
-    	$id2 = Meta::put(reset($this->testFiles));
+    	$id2 = File::put(reset($this->testFiles));
     	
-    	$metaNew = Meta::get($id2);
+    	$fileNew = File::get($id2);
     	
-    	$this->assertNotEquals($meta->id, $metaNew->id, 'Same files meta not stored correctly!');
+    	$this->assertNotEquals($file->id, $fileNew->id, 'Same files not stored correctly!');
 
-    	$this->assertEquals($meta->file->id, $metaNew->file->id, 'Same files not stored correctly!');
+    	$this->assertEquals($file->content->id, $fileNew->content->id, 'Same files not stored correctly!');
     }    
     
-    public function testMetaLinks()
+    public function testFileLinks()
     {
-    	$newMeta = [
+    	$newFile = [
 	    	'link' => 'test/link',
 	    	'backref' => 'test/backref',
-	    	'file' => reset($this->testFiles)
+	    	'content' => [
+	    			'path' => reset($this->testFiles)
+	    	]
     	];
     	
-    	$id = Meta::put($newMeta);
+    	$id = File::put($newFile);
     	
     	$this->assertIsInt($id, 'File not added correctly!');
 
-    	$meta = Meta::get($id, false);
+    	$file = File::get($id, false);
 
-    	$this->assertEquals($newMeta['link'], $meta->link, 'File link not stored correctly!');
+    	$this->assertEquals($newFile['link'], $file->link, 'File link not stored correctly!');
     	
-    	$this->assertEquals($newMeta['backref'], $meta->backref, 'File backref not stored correctly!');
+    	$this->assertEquals($newFile['backref'], $file->backref, 'File backref not stored correctly!');
     	
-    	$this->assertFileExists($meta->file->path, 'File name not stored correctly!');
+    	$this->assertFileExists($file->content->path, 'File content not stored correctly!');
     	
-    	Meta::putMany($id, 'test/backref/changed');
+    	File::putMany($id, 'test/backref/changed');
     	
-    	$meta = Meta::get($id, false);
+    	$file = File::get($id, false);
     	
-    	$this->assertEquals('test/backref/changed', $meta->backref, 'File backref not updated correctly!');
+    	$this->assertEquals('test/backref/changed', $file->backref, 'File backref not updated correctly!');
     	
-    	$this->assertEquals($id, Meta::getIdByLink($newMeta['link']), 'File cannot locate meta by link!');
+    	$this->assertEquals($id, File::getIdByLink($newFile['link']), 'File cannot locate file by link!');
     	
-    	$this->assertTrue(Meta::fileExists($id), 'File existence check error!');
+    	$this->assertTrue(File::fileExists($id), 'File existence check error!');
     }  
     
-    public function testMetaLocalAccess()
+    public function testFileLocalAccess()
     {
     	ModuleJoint::register(Mocks\TestFileStorageAccess::class);
     	
@@ -122,7 +124,7 @@ class FileStorageTest extends TestCase
 
     	$testFile = reset($this->testFiles);
     	
-    	$fileId = File::putDataFromFile($testFile);
+    	$fileId = FileContent::putFromFile($testFile);
     	
     	$urls = LocalFileStorageAccess::getActionUrls($fileId, ['hash' => 'test_hash']);//, 'thumbnail' => 0]);
     	
@@ -140,21 +142,21 @@ class FileStorageTest extends TestCase
     		
     		$response->assertHeader('Content-Length', strlen(file_get_contents($testFile)));
     		
-    		$this->assertEquals(++ $timesAccessed, AccessLog::where('meta_id', $fileId)->count(), 'File access log incorrect');
+    		$this->assertEquals(++ $timesAccessed, FileAccessLog::where('file_id', $fileId)->count(), 'File access log incorrect');
     	}
     }  
     
-    public function testMetaRemoteAccess()
+    public function testFileRemoteAccess()
     {
     	ModuleJoint::register(RemoteFileStorageAccess::class);
     	
     	$testFile = reset($this->testFiles);
     	
-    	$fileId = File::putDataFromFile($testFile);
+    	$fileId = FileContent::putFromFile($testFile);
     	
     	$expiry = '2 weeks';
     	
-    	$remote = Remote::grant($fileId, $expiry);
+    	$remote = FileRemoteAccess::grant($fileId, $expiry);
     	
     	$this->assertEquals(strtotime($expiry), strtotime($remote->expires_at), 'Mismatch in file remote access expiry time');
     	
