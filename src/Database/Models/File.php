@@ -23,14 +23,13 @@ class File extends Model
     }
     
     /**
-     * Retrieve the file data
+     * Retrieve the file
      *
      * @param int|string $idOrLink Filestorage ID or unique link string
      * @param bool $useCache Use cache or not
      *
-     * @return array Metadata about the file.
-     *               Keys in array: hash, file, filename, link, backref,
-     *               created_at, created_by, deleted, file_id
+     * @return static
+     * 
      * @throws FileNotFound
      */
     public static function get($idOrLink, $useCache = true)
@@ -43,7 +42,7 @@ class File extends Model
     		return $cache[$id];
     	}
 
-    	$file = self::findOrFail($id);
+    	$file = self::with('content')->findOrFail($id);
     	
     	if (empty($file->content['hash'])) {
     		throw new FileNotFound('File object does not have corresponding content');
