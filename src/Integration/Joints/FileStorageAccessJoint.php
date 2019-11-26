@@ -53,7 +53,7 @@ abstract class FileStorageAccessJoint extends ModuleJoint
 		
 		$urls = [];
 		foreach (static::$allowedActions as $action) {
-			$urls[$action] = static::$route . '?' . http_build_query(compact('id', 'action') + $accessParams);
+			$urls[$action] = url(static::$route) . '?' . http_build_query(compact('id', 'action') + $accessParams);
 		}
 		
 		return $urls;
