@@ -35,6 +35,8 @@ class File extends Model
     public static function get($idOrLink, $useCache = true)
     {
     	static $cache = [];
+    	
+    	if (is_object($idOrLink)) return $idOrLink;
 
     	$id = self::getIdByLink($idOrLink, true, true);
 
