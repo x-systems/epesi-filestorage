@@ -25,4 +25,8 @@ class FileRemoteAccess extends Model {
 				'expires_at' => date('Y-m-d H:i:s', strtotime($expires)),
 		]);
     }
+    
+    public function getHrefAttribute()
+    {		return url('file') . '?' . http_build_query(['id' => $this->file_id, 'token' => $this->token]);
+    }
 }
