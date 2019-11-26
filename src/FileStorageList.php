@@ -18,7 +18,7 @@ class FileStorageList extends ModuleView
 	
 	public function body()
 	{	
-		$this->grid = $this->add([
+		$grid = $this->add([
 				'CRUD',
 				'canCreate' => false,
 				'canUpdate' => false,
@@ -28,17 +28,17 @@ class FileStorageList extends ModuleView
 				]
 		]);
 
-		$this->grid->menu->addItem([__('Back'), 'icon'=>'arrow left'])->link(url('view/system'));
+		$grid->menu->addItem([__('Back'), 'icon'=>'arrow left'])->link(url('view/system'));
 		
-		$this->grid->setModel($this->getModel());
+		$grid->setModel($this->getModel());
 		
-		$this->grid->addDecorator('name', ['Multiformat', function($row, $column) {
+		$grid->addDecorator('name', ['Multiformat', function($row, $column) {
 			return [['Template', '<a href="#" class="file-modal" data-id="' . $row['id'] . '">' . $row[$column]  . '</a>']];
 		}]);
 		
 		$modal = $this->add(new FileModal());
 		
-		$this->grid->on('click', '.file-modal', $modal->show());
+		$grid->on('click', '.file-modal', $modal->show());
 
 		return $this;
 	}
