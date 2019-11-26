@@ -113,7 +113,7 @@ class FileStorageTest extends TestCase
     	
     	$this->assertEquals($id, File::getIdByLink($newFile['link']), 'File cannot locate file by link!');
     	
-    	$this->assertTrue(File::fileExists($id), 'File existence check error!');
+    	$this->assertTrue(File::exists($id), 'File existence check error!');
     }  
     
     public function testFileLocalAccess()
