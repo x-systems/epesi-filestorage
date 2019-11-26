@@ -20,6 +20,7 @@ class FileStorageController extends Controller
     	switch ($request->get('action')) {	
     		case 'preview':
     			$useThumbnail = true;
+    			// intended fallthrough
     		case 'inline':
     			$disposition = 'inline';
     			break;
