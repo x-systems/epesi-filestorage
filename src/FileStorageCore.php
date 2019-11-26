@@ -31,8 +31,6 @@ class FileStorageCore extends ModuleCore
 	
 	public function install()
 	{
-		$this->uninstall();
-		
 		$downloadFiles = Permission::create(['name' => 'download files']);
 		
 		Role::findByName('Admin')->givePermissionTo($downloadFiles);
