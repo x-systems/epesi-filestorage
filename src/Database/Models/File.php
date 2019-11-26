@@ -85,7 +85,7 @@ class File extends Model
      *
      * @param int|string $idOrLink Filestorage ID or unique link
      */
-    public static function deleteFile($idOrLink)
+    public static function unlink($idOrLink)
     {
    		if ($id = self::getIdByLink($idOrLink, false)) {
    			self::find($id)->delete();
@@ -101,7 +101,7 @@ class File extends Model
      * @return bool True if file exists, false otherwise
      * @throws FileNotFound May be thrown if $throwException set to true
      */
-    public static function fileExists($idOrMeta, $throwException = false)
+    public static function exists($idOrMeta, $throwException = false)
     {
     	try {
     		$file = is_numeric($idOrMeta) ? self::get($idOrMeta) : $idOrMeta;
