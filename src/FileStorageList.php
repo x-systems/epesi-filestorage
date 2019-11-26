@@ -6,7 +6,6 @@ use Epesi\Core\System\Integration\Modules\ModuleView;
 use Illuminate\Support\Facades\Auth;
 use Epesi\Core\Data\Persistence\SQL;
 use Epesi\FileStorage\Seeds\FileModal;
-use Epesi\Core\System\User\Database\Models\User;
 
 class FileStorageList extends ModuleView
 {
@@ -25,7 +24,7 @@ class FileStorageList extends ModuleView
 				'canUpdate' => false,
 				'canDelete' => false,
 				'quickSearch' => [
-						'name'
+						'name', 'created_by_user', 
 				]
 		]);
 
@@ -37,12 +36,6 @@ class FileStorageList extends ModuleView
 			return [['Template', '<a href="#" class="file-modal" data-id="' . $row['id'] . '">' . $row[$column]  . '</a>']];
 		}]);
 		
-		$this->grid->addDecorator('created_by', ['Multiformat', function($row, $column) {
-			if (! $user = User::find($row[$column])) return '';
-			
-			return [['Template', $user->name]];
-		}]);
-
 		$modal = $this->add(new FileModal());
 		
 		$this->grid->on('click', '.file-modal', $modal->show());
@@ -53,11 +46,21 @@ class FileStorageList extends ModuleView
 	public function getModel()
 	{
 		$atkDb = app()->make(SQL::class);
+
+		$user = new \atk4\data\Model($atkDb, 'users');
 		
+		$user->addField('name');
+
 		$model = new \atk4\data\Model($atkDb, 'filestorage_files');
 		
-		$model->addFields(['created_at', 'created_by', 'name', 'link']);
-
+		$model->addFields([
+				['created_at', 'caption' => __('Created At')],
+				['name', 'caption' => __('File Name')],
+				['link', 'caption' => __('Link')]
+		]);
+		
+		$model->hasOne('created_by', $user)->addTitle(['field' => 'created_by_user', 'caption' => __('Created By')]);
+		
 		return $model;
 	}
 }
