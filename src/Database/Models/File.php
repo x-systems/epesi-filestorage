@@ -22,6 +22,12 @@ class File extends Model
     	return $this->belongsTo(FileContent::class, 'content_id');
     }
     
+    public function links()
+    {
+    	return $this->hasMany(FileRemoteAccess::class, 'file_id');
+    }
+    
+    
     /**
      * Retrieve the file
      *
