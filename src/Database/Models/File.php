@@ -27,7 +27,11 @@ class File extends Model
     	return $this->hasMany(FileRemoteAccess::class, 'file_id');
     }
     
-    
+    public function userActiveLinks()
+    {
+    	return $this->links()->where('created_by', Auth::id())->where('expires_at', '>', date('Y-m-d H:i:s'));
+    }
+        
     /**
      * Retrieve the file
      *
