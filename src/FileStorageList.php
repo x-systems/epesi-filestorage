@@ -6,6 +6,7 @@ use Epesi\Core\System\Integration\Modules\ModuleView;
 use Illuminate\Support\Facades\Auth;
 use Epesi\Core\Data\Persistence\SQL;
 use Epesi\FileStorage\Seeds\FileModal;
+use Epesi\Core\Layout\Seeds\ActionBar;
 
 class FileStorageList extends ModuleView
 {
@@ -18,6 +19,8 @@ class FileStorageList extends ModuleView
 	
 	public function body()
 	{	
+		ActionBar::addButton('back')->link(url('view/system'));
+		
 		$grid = $this->add([
 				'CRUD',
 				'canCreate' => false,
@@ -28,19 +31,13 @@ class FileStorageList extends ModuleView
 				]
 		]);
 
-		$grid->menu->addItem([__('Back'), 'icon'=>'arrow left'])->link(url('view/system'));
-		
 		$grid->setModel($this->getModel());
 		
 		$grid->addDecorator('name', ['Multiformat', function($row, $column) {
 			return [['Template', '<a href="#" class="file-modal" data-id="' . $row['id'] . '">' . $row[$column]  . '</a>']];
 		}]);
-		
-		$modal = $this->add(new FileModal());
-		
-		$grid->on('click', '.file-modal', $modal->show());
 
-		return $this;
+		$grid->on('click', '.file-modal', $this->add(new FileModal())->show());
 	}
 	
 	public function getModel()
