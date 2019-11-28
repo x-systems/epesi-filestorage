@@ -94,7 +94,7 @@ class FileView extends View
 			
 			$link->delete();
 			
-			return $this->reload();
+			return $this->jsReload();
 		}, ['link' => new jsExpression('$(this).data("id")')]));
 	}
 	
@@ -127,7 +127,7 @@ class FileView extends View
 				
 				FileRemoteAccess::grant($this->file, $period);
 				
-				return $this->reload();
+				return $this->jsReload();
 			});
 			
 			$linkButton->on('click', $dropdown->cb);
@@ -137,9 +137,5 @@ class FileView extends View
 	protected function actionDisabled($action) 
 	{
 		return in_array($action, (array) $this->disableActions);
-	}
-	
-	protected function reload() {
-		return new \atk4\ui\jsReload($this);
 	}
 }
