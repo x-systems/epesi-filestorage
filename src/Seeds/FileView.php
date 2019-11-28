@@ -129,9 +129,9 @@ class FileView extends View
 				
 				return $this->reload();
 			});
-		}
 			
-		$linkButton->on('click', $dropdown->cb);
+			$linkButton->on('click', $dropdown->cb);
+		}		
 	}
 	
 	protected function actionDisabled($action) 
