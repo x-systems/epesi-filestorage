@@ -49,7 +49,7 @@ abstract class FileStorageAccessJoint extends ModuleJoint
 	 */
 	final public static function getActionUrls($file, $accessParams = [])
 	{
-		$id = is_numeric($file)? $file: $file->id;
+		$id = is_numeric($file)? $file: $file['id'];
 		
 		$urls = [];
 		foreach (static::$allowedActions as $action) {

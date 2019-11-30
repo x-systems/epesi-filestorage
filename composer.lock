@@ -478,16 +478,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/x-systems/epesi-core.git",
-                "reference": "c28376f9f49890176409b5694b60286cb93dffcf"
+                "reference": "9b6cf0b7e9fe451e63980f3b9f7384f5271144e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/x-systems/epesi-core/zipball/c28376f9f49890176409b5694b60286cb93dffcf",
-                "reference": "c28376f9f49890176409b5694b60286cb93dffcf",
+                "url": "https://api.github.com/repos/x-systems/epesi-core/zipball/9b6cf0b7e9fe451e63980f3b9f7384f5271144e6",
+                "reference": "9b6cf0b7e9fe451e63980f3b9f7384f5271144e6",
                 "shasum": ""
             },
             "require": {
-                "atk4/ui": "^1.7",
+                "atk4/core": "dev-develop",
+                "atk4/data": "dev-develop",
+                "atk4/dsql": "dev-develop",
+                "atk4/ui": "dev-develop",
                 "joedixon/laravel-translation": "^1.0",
                 "laravel/framework": "5.8.*",
                 "php": ">=7.2",

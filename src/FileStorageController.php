@@ -10,11 +10,11 @@ class FileStorageController extends Controller
     public function get(Request $request)
     {
     	try {
-    		$file = Database\Models\File::get($request->get('id'));
+    		$file = Database\Models\File::retrieve($request->get('id'));
     	} catch (\Exception $e) {
     		abort(404);
     	}
-    	
+
     	$useThumbnail = false;
     	$disposition = 'attachment';
     	switch ($request->get('action')) {	
@@ -29,15 +29,17 @@ class FileStorageController extends Controller
     			break;
     	}
 
-    	if ($useThumbnail && $request->get('thumbnail', 1) && ($thumbnail = $file->thumbnail)) {
+    	if ($useThumbnail && $request->get('thumbnail', 1) && ($thumbnail = $file['thumbnail'])) {
     		$mime = $thumbnail['mime'];
     		$filename = $thumbnail['name'];
     		$contents = $thumbnail['contents'];
     	}
     	else {
-    		$mime = $file->content->type;
-    		$filename = $file->name;
-    		$contents = $file->content->data;
+    		$content = $file->ref('content');
+    		
+    		$mime = $content['type'];
+    		$filename = $file['name'];
+    		$contents = $content['data'];
     	}
     	
     	$headers = [

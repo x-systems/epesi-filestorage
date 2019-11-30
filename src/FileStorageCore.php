@@ -45,7 +45,6 @@ class FileStorageCore extends ModuleCore
 	{
 		Route::group(['namespace' => 'Epesi\FileStorage'], function(){
 			Route::get('file', 'FileStorageController@get')->middleware('web', FileStorageAccess::class);
-		});
-		
+		});		
 	}
 }

@@ -2,21 +2,33 @@
 
 namespace Epesi\FileStorage\Database\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Epesi\Core\Data\Model;
 
 class WriteError extends \Exception {}
 
 class FileContent extends Model {
     
 	const HASH_METHOD = 'sha512';
-	
-	public $timestamps = false;
-	
-    protected $table = 'filestorage_contents';
-    protected static $unguarded = true;    
-    
+
+	public $table = 'filestorage_contents';
+
     protected $appends = ['path'];
+    
+    function init(){
+    	parent::init();
+    	
+    	$this->addFields([
+    			'hash',
+    			'size',
+    			'type'
+    	]);
+    	
+    	$this->hasMany('files', [File::class, 'their_field' => 'content_id']);
+    	$this->addCalculatedField('storage_path', [[$this, 'getStoragePathAttribute']]);
+    	$this->addCalculatedField('path', [[$this, 'getPathAttribute']]);
+    	$this->addCalculatedField('data', [[$this, 'getDataAttribute']]);    	
+    }
     
     /**
      * One content can have many files associated with
@@ -26,7 +38,7 @@ class FileContent extends Model {
      */
     public function files()
     {
-    	return $this->hasMany(File::class, 'content_id');
+    	return $this->ref('files');
     }
     
     /**
@@ -37,7 +49,7 @@ class FileContent extends Model {
      */
     public function getPathAttribute()
     {
-    	return self::storage()->path($this->getStoragePath($this->hash));
+    	return self::storage()->path($this->getStoragePath($this->get('hash')));
     }
     
     /**
@@ -47,7 +59,7 @@ class FileContent extends Model {
      */
     public function getDataAttribute()
     {
-    	return self::storage()->get($this->storage_path);
+    	return self::storage()->get($this->get('storage_path'));
     }
     
     /**
@@ -57,7 +69,7 @@ class FileContent extends Model {
      */
     public function getStoragePathAttribute()
     {
-    	return $this->getStoragePath($this->hash);
+    	return $this->getStoragePath($this->get('hash'));
     }
     
     protected static function getStoragePath($hash)
@@ -82,9 +94,9 @@ class FileContent extends Model {
      *
      * @return int File id in the database
      */
-    public static function putFromFile($file)
+    public static function storeFromFile($file)
     {
-    	return self::put(file_get_contents($file));
+    	return self::store(file_get_contents($file));
     }
     
     /**
@@ -94,7 +106,7 @@ class FileContent extends Model {
      *
      * @return int File id in the database
      */
-    public static function put($content)
+    public static function store($content)
     {
     	$hash = self::hash($content);
     	
@@ -104,10 +116,16 @@ class FileContent extends Model {
     		self::storage()->put($path, $content);
     	}
     	
-    	return self::firstOrCreate(compact('hash'), [
-    			'size' => self::storage()->size($path),
-    			'type' => self::storage()->mimeType($path)
-    	])->id;
+    	$content = self::create()->addCondition('hash', $hash);
+
+    	if (! $content->action('count')->getOne()) {  
+    		return $content->insert([
+    				'size' => self::storage()->size($path),
+    				'type' => self::storage()->mimeType($path)
+    		]);
+    	}
+    	
+    	return $content->loadAny()->get('id');
     }
     
     /**

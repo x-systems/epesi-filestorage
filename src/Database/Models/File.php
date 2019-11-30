@@ -2,9 +2,9 @@
 
 namespace Epesi\FileStorage\Database\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Epesi\Core\Data\Model;
+use Epesi\Core\System\User\Database\Models\atk4\User;
 
 class LinkNotFound extends \Exception {}
 class LinkDuplicate extends \Exception {}
@@ -12,24 +12,33 @@ class FileNotFound extends \Exception {}
 
 class File extends Model
 {
-	use SoftDeletes;
-	
-    protected $table = 'filestorage_files';
-    protected static $unguarded = true;
+	public $table = 'filestorage_files';
 
-    public function content()
-    {
-    	return $this->belongsTo(FileContent::class, 'content_id');
+    function init() {
+    	parent::init();
+    	
+    	$this->addFields([
+    			['created_at', 'caption' => __('Created At')],
+    			['name', 'caption' => __('File Name')],
+    			['link', 'caption' => __('Link')],
+    			'backref'
+    	]);
+    	    	
+    	$this->hasOne('created_by', [User::class, 'our_field' => 'created_by'])->addTitle(['field' => 'created_by_user', 'caption' => __('Created By')]);
+    	
+    	$this->hasOne('content', [FileContent::class, 'our_field' => 'content_id']);
+    	
+    	$this->hasMany('links', [FileRemoteAccess::class, 'their_field' => 'file_id']);
+    	
+    	$this->addCalculatedField('thumbnail', [[$this, 'getThumbnailAttribute']]);
     }
-    
-    public function links()
-    {
-    	return $this->hasMany(FileRemoteAccess::class, 'file_id');
-    }
-    
+
     public function userActiveLinks()
     {
-    	return $this->links()->where('created_by', Auth::id())->where('expires_at', '>', date('Y-m-d H:i:s'));
+    	return $this->ref('links')->addCrits([
+    			['created_by', Auth::id()],
+    			['expires_at', '>', date('Y-m-d H:i:s')]
+    	]);
     }
         
     /**
@@ -42,25 +51,17 @@ class File extends Model
      * 
      * @throws FileNotFound
      */
-    public static function get($idOrLink, $useCache = true)
+    public static function retrieve($idOrLink)
     {
-    	static $cache = [];
-    	
-    	if (is_object($idOrLink)) return $idOrLink;
-
     	$id = self::getIdByLink($idOrLink, true, true);
 
-    	if ($useCache && isset($cache[$id])) {
-    		return $cache[$id];
-    	}
-
-    	$file = self::with('content')->findOrFail($id);
+    	$file = self::create()->tryLoad($id);
     	
-    	if (empty($file->content['hash'])) {
+    	if (! $file->ref('content')['hash']) {
     		throw new FileNotFound('File object does not have corresponding content');
     	}
 
-    	return $cache[$id] = $file;
+    	return $file;
     }
     
     /**
@@ -77,10 +78,14 @@ class File extends Model
     {
     	static $cache = [];
     	
-    	if (is_numeric($link)) return $link;
+    	if (is_numeric($link) || is_null($link)) return $link;
+    	
+    	if (is_object($link)) return $link['id'];
     	
     	if (!$useCache || !isset($cache[$link])) {
-    		$cache[$link] = self::where('link', $link)->value('id');
+    		$file = self::create()->tryLoadBy('link', $link);
+    		
+    		$cache[$link] = $file? $file->get('id'): null;
     		
     		if (!$cache[$link] && $throwException) {
     			throw new LinkNotFound($link);
@@ -98,7 +103,7 @@ class File extends Model
     public static function unlink($idOrLink)
     {
    		if ($id = self::getIdByLink($idOrLink, false)) {
-   			self::find($id)->delete();
+   			self::create()->delete($id);
     	}
     }
     
@@ -114,10 +119,10 @@ class File extends Model
     public static function exists($idOrMeta, $throwException = false)
     {
     	try {
-    		$file = is_numeric($idOrMeta) ? self::get($idOrMeta) : $idOrMeta;
+    		$file = is_numeric($idOrMeta) ? self::retrieve($idOrMeta) : $idOrMeta;
     		
-    		if (! file_exists($file->content->path)) {
-    			throw new FileNotFound('Exception - file not found: ' . $file->content->path);
+    		if (! file_exists($file->ref('content')['path'])) {
+    			throw new FileNotFound('Exception - file not found: ' . $file->ref('content')['path']);
     		}
     	} catch (\Exception $exception) {
     		if ($throwException)
@@ -137,26 +142,23 @@ class File extends Model
      * @param string|null $backref Backref for all files
      * @return array Newly created Meta Ids sorted in ascending order
      */
-    public static function putMany($files, $backref = null)
+    public static function storeMany($files, $backref = null)
     {
     	$ids = [];
     	foreach ((array) $files as $filePath) {
     		if (! is_numeric($filePath)) {
-    			$ids[] = self::put($filePath);
+    			$ids[] = self::store($filePath);
     			
     			continue;
     		}
     		
-    		$file = self::get($filePath, false)->toArray();
+    		$file = self::retrieve($filePath, false);
     			
     		if ($backref && $file['backref'] != $backref) {
-    			$file['backref'] = $backref;
-    			unset($file['link']);
-    			
-    			self::put($file);
+    			$file->save(compact('backref'));
     		}
     			
-    		$ids[] = $file;
+    		$ids[] = $file['id'];
     	}
     	
     	sort($ids);
@@ -171,9 +173,18 @@ class File extends Model
      * @return int Filestorage ID
      * @throws LinkDuplicate
      */
-    public static function put($fileOrPath, $content = null) 
+    public static function store($fileOrPath, $content = null) 
     {
     	$file = $fileOrPath;
+    	
+    	if (is_object($file)) {
+    		$file->action('update', [
+    				'content_id' => FileContent::store($content)
+    		]);
+    		
+    		return $file['id'];
+    	}
+    	    	
     	if (! $content && is_string($fileOrPath)) {
     		$content = file_get_contents($fileOrPath);
     		
@@ -182,7 +193,7 @@ class File extends Model
     		];
     	}
     	
-    	if (!empty($file['link']) && self::getIdByLink($file['link'], false)) {
+    	if (! empty($file['link']) && self::getIdByLink($file['link'], false)) {
     		throw new LinkDuplicate($file['link']);
     	}
     	
@@ -197,19 +208,19 @@ class File extends Model
     	}
 
     	unset($file['content']);
-    	
-    	return self::updateOrCreate(['id' => $file['id']?? null], array_merge([
-    			'created_at' => time(),
-    			'created_by' => Auth::id(),
-    			'content_id' => FileContent::put($content)
-    	], $file))->id;
+
+   		return self::create()->insert(array_merge([
+   				'created_at' => date('Y-m-d H:i:s'),
+   				'created_by' => Auth::id(),
+   				'content_id' => FileContent::store($content)
+   		], $file));
     }
     
     public function getThumbnailAttribute()
     {
     	if (! $this->thumbnailPossible()) return false;
     	
-    	$image = new \Imagick($this->content->path . '[0]');
+    	$image = new \Imagick($this->ref('content')['path']  . '[0]');
     	
     	$image->setImageFormat('jpg');
     	
@@ -223,6 +234,6 @@ class File extends Model
     }
     
     protected function thumbnailPossible() {
-    	return $this->content->type == 'application/pdf' && class_exists('Imagick');
+    	return $this->ref('content')['type'] == 'application/pdf' && class_exists('Imagick');
     }
 }

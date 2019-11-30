@@ -11,10 +11,6 @@ class FileModal extends Modal
 	
 	public $periodSelection;
 	
-	protected $canvas;
-	
-	protected $file;
-	
 	public function init()
 	{
 		$this->title = __('File');

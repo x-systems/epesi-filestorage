@@ -20,7 +20,7 @@ class FileView extends View
 
 	public function __construct($file)
 	{
-		$this->file = is_numeric($file)? File::get($file): $file;
+		$this->file = File::retrieve($file);
 	}
 	
 	public function renderView()
@@ -72,25 +72,25 @@ class FileView extends View
 	{
 		$container = $container?: $this;
 		
-		$container->add([new FileDetailsLister($this->file)]);
+		$container->add(new FileDetailsLister($this->file));
 	}
 	
 	protected function addFileRemoteLinks($container = null) {
 		$container = $container?: $this;
 		
-		foreach ($this->file->userActiveLinks()->get() as $link) {
-			$container->add(['View', __('Remote access link expiring :expiry', ['expiry' => $link->expires_at])]);
-			$linkInput = $container->add([new \atk4\ui\FormField\Input(['readonly' => true, 'iconLeft' => 'linkify'])])->set($link->href)->setStyle(['width' => '100%', 'margin-bottom' => '15px']);
+		foreach ($this->file->userActiveLinks() as $link) {
+			$container->add(['View', __('Remote access link expiring :expiry', ['expiry' => $link['expires_at']->format('Y-m-d H:i:s')])]);
+			$linkInput = $container->add([new \atk4\ui\FormField\Input(['readonly' => true, 'iconLeft' => 'linkify'])])->set($link['href'])->setStyle(['width' => '100%', 'margin-bottom' => '15px']);
 			
 			$linkInput->action = new \atk4\ui\Button([_('Copy'), 'iconRight' => 'copy', 'attr' => ['data-clipboard-target' => "#{$linkInput->id}_input", 'title' => __('Click to copy link')], 'class' => ['basic copy-button']]);
 			
-			$linkInput->add(['Button', 'icon'=>'red x icon', 'class' => ['basic delete-link']], 'AfterAfterInput')->setAttr(['data-id' => $link->id, 'title' => __('Disable link')]);
+			$linkInput->add(['Button', 'icon'=>'red x icon', 'class' => ['basic delete-link']], 'AfterAfterInput')->setAttr(['data-id' => $link['id'], 'title' => __('Disable link')]);
 		}
 		
 		$container->js(true, new jsExpression('new ClipboardJS(".copy-button")'));
 		
 		$container->on('click', '.delete-link', $this->add(['jsCallback', 'postTrigger' => 'link'])->set(function($j, $linkId) {
-			if (! $link = FileRemoteAccess::find($linkId)) return;
+			if (! $link = FileRemoteAccess::create()->load($linkId)) return;
 			
 			$link->delete();
 			

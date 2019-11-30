@@ -4,7 +4,6 @@ namespace Epesi\FileStorage\Seeds;
 
 use atk4\ui\Lister;
 use Epesi\Core\Helpers\Utils;
-use Epesi\Core\System\User\Database\Models\User;
 use Epesi\FileStorage\Database\Models\File;
 
 class FileDetailsLister extends Lister
@@ -15,7 +14,7 @@ class FileDetailsLister extends Lister
 
 	public function __construct($file)
 	{
-		$this->file = is_numeric($file)? File::get($file): $file;
+		$this->file = File::retrieve($file);
 	}
 	
 	public function init()
@@ -37,19 +36,19 @@ class FileDetailsLister extends Lister
 		return $this->file? [
 				'name' => [
 						'title'=> __('Name'),
-						'descr'=> $this->file->name
+						'descr'=> $this->file['name']
 				],
 				'size' => [
 						'title'=> __('Size'),
-						'descr'=> Utils::bytesToHuman($this->file->content->size)
+						'descr'=> Utils::bytesToHuman($this->file->ref('content')['size'])
 				],
 				'created_by' => [
 						'title'=> __('Created By'),
-						'descr'=> User::find($this->file->created_by)->name
+						'descr'=> $this->file['created_by_user']
 				],
 				'created_at' => [
 						'title'=> __('Created At'),
-						'descr'=> $this->file->created_at->format('Y-m-d H:i:s')
+						'descr'=> $this->file['created_at']
 				]
 		]: [];
 	}
