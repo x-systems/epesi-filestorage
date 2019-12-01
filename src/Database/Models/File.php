@@ -18,13 +18,13 @@ class File extends Model
     	parent::init();
     	
     	$this->addFields([
-    			['created_at', 'caption' => __('Created At')],
+    			['created_at', 'caption' => __('Stored At')],
     			['name', 'caption' => __('File Name')],
     			['link', 'caption' => __('Link')],
     			'backref'
     	]);
     	    	
-    	$this->hasOne('created_by', [User::class, 'our_field' => 'created_by'])->addTitle(['field' => 'created_by_user', 'caption' => __('Created By')]);
+    	$this->hasOne('created_by', [User::class, 'our_field' => 'created_by'])->addTitle(['field' => 'created_by_user', 'caption' => __('Stored By')]);
     	
     	$this->hasOne('content', [FileContent::class, 'our_field' => 'content_id']);
     	

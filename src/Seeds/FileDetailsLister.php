@@ -43,11 +43,11 @@ class FileDetailsLister extends Lister
 						'descr'=> Utils::bytesToHuman($this->file->ref('content')['size'])
 				],
 				'created_by' => [
-						'title'=> __('Created By'),
+						'title'=> __('Stored By'),
 						'descr'=> $this->file['created_by_user']
 				],
 				'created_at' => [
-						'title'=> __('Created At'),
+						'title'=> __('Stored At'),
 						'descr'=> $this->file['created_at']
 				]
 		]: [];
