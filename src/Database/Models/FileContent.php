@@ -25,9 +25,9 @@ class FileContent extends Model {
     	]);
     	
     	$this->hasMany('files', [File::class, 'their_field' => 'content_id']);
-    	$this->addCalculatedField('storage_path', [[$this, 'getStoragePathAttribute']]);
-    	$this->addCalculatedField('path', [[$this, 'getPathAttribute']]);
-    	$this->addCalculatedField('data', [[$this, 'getDataAttribute']]);    	
+    	$this->addCalculatedField('storage_path', [[__CLASS__, 'getStoragePathField']]);
+    	$this->addCalculatedField('path', [[__CLASS__, 'getPathField']]);
+    	$this->addCalculatedField('data', [[__CLASS__, 'getDataField']]);    	
     }
     
     /**
@@ -47,9 +47,9 @@ class FileContent extends Model {
      * 
      * @return string
      */
-    public function getPathAttribute()
+    public static function getPathField($model)
     {
-    	return self::storage()->path($this->getStoragePath($this->get('hash')));
+    	return self::storage()->path($model->getStoragePath($model->get('hash')));
     }
     
     /**
@@ -57,9 +57,9 @@ class FileContent extends Model {
      * 
      * @return string
      */
-    public function getDataAttribute()
+    public static function getDataField($model)
     {
-    	return self::storage()->get($this->get('storage_path'));
+    	return self::storage()->get($model->get('storage_path'));
     }
     
     /**
@@ -67,9 +67,9 @@ class FileContent extends Model {
      * 
      * @return string
      */
-    public function getStoragePathAttribute()
+    public static function getStoragePathField($model)
     {
-    	return $this->getStoragePath($this->get('hash'));
+    	return $model->getStoragePath($model->get('hash'));
     }
     
     protected static function getStoragePath($hash)

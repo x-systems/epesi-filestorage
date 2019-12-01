@@ -30,7 +30,7 @@ class File extends Model
     	
     	$this->hasMany('links', [FileRemoteAccess::class, 'their_field' => 'file_id']);
     	
-    	$this->addCalculatedField('thumbnail', [[$this, 'getThumbnailAttribute']]);
+    	$this->addCalculatedField('thumbnail', [[__CLASS__, 'getThumbnailField']]);
     }
 
     public function userActiveLinks()
@@ -216,24 +216,22 @@ class File extends Model
    		], $file));
     }
     
-    public function getThumbnailAttribute()
+    public static function getThumbnailField($model)
     {
-    	if (! $this->thumbnailPossible()) return false;
+    	if (! $model->thumbnailPossible()) return false;
     	
-    	$image = new \Imagick($this->ref('content')['path']  . '[0]');
+    	$image = new \Imagick($model->ref('content')['path']  . '[0]');
     	
     	$image->setImageFormat('jpg');
     	
-    	$mime = 'image/jpeg';
-    	
-    	$name = 'preview.jpeg';
-    	
-    	$contents = $image . '';
-    	
-    	return collect(compact('mime', 'name', 'contents'));
+    	return collect([
+    			'mime' => 'image/jpeg',
+    			'name' => 'preview.jpeg',
+    			'contents' => $image . ''
+    	]);
     }
     
-    protected function thumbnailPossible() {
+    public function thumbnailPossible() {
     	return $this->ref('content')['type'] == 'application/pdf' && class_exists('Imagick');
     }
 }

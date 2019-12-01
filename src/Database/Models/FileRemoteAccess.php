@@ -23,7 +23,7 @@ class FileRemoteAccess extends Model {
     	$this->hasOne('file_id', File::class)->addTitle(['field' => 'file', 'caption' => __('File Name')]);
     	$this->hasOne('created_by', User::class)->addTitle(['field' => 'created_by_user', 'caption' => __('Created By')]);
     	
-    	$this->addCalculatedField('href', [[$this, 'getHrefAttribute']]);
+    	$this->addCalculatedField('href', [[__CLASS__, 'getHrefField']]);
     }
 
     public static function check($fileId, $token)
@@ -47,8 +47,8 @@ class FileRemoteAccess extends Model {
 		]);
     }
     
-    public function getHrefAttribute()
+    public static function getHrefField($model)
     {		
-    	return url('file') . '?' . http_build_query(['id' => $this['file_id'], 'token' => $this['token']]);
+    	return url('file') . '?' . http_build_query(['id' => $model['file_id'], 'token' => $model['token']]);
     }
 }
