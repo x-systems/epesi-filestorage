@@ -17,9 +17,10 @@
 		}
 	],
 	"type" : "project",
+	"minimum-stability": "dev",
 	"require" : {
 		"php" : ">=7.2",
-		"epesi/core" : "master-dev"
+		"epesi/core" : "dev-master"
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "^8.0",

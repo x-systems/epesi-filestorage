@@ -4,30 +4,40 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6762b7ca3224ae41df8cc5063535fb3",
+    "content-hash": "c83ce238e4ca5f6335765e2df4990b20",
     "packages": [
         {
             "name": "atk4/core",
-            "version": "1.3.10",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atk4/core.git",
-                "reference": "f74ab9f8f8d3cbdac0aad40282703c69179e1d69"
+                "reference": "6d814b99bfe76ad509022aa52c07e3656f05e228"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atk4/core/zipball/f74ab9f8f8d3cbdac0aad40282703c69179e1d69",
-                "reference": "f74ab9f8f8d3cbdac0aad40282703c69179e1d69",
+                "url": "https://api.github.com/repos/atk4/core/zipball/6d814b99bfe76ad509022aa52c07e3656f05e228",
+                "reference": "6d814b99bfe76ad509022aa52c07e3656f05e228",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0",
+                "ext-json": "*",
+                "php": ">=7.2.0",
                 "psr/log": "~1.0"
             },
+            "replace": {
+                "atk4/core": "self.version"
+            },
             "require-dev": {
+                "atk4/data": "dev-develop",
                 "codeclimate/php-test-reporter": "*",
-                "phpunit/phpunit": "<6",
-                "satooshi/php-coveralls": "^1.0"
+                "phpunit/phpunit": "*",
+                "satooshi/php-coveralls": "^1.0",
+                "symfony/contracts": "^1.1",
+                "symfony/yaml": "~2.1|~3.0|~4.0"
+            },
+            "suggest": {
+                "symfony/yaml": "~2.1|~3.0|~4.0"
             },
             "type": "library",
             "autoload": {
@@ -54,29 +64,30 @@
                 "php",
                 "trains"
             ],
-            "time": "2019-02-04T13:37:55+00:00"
+            "time": "2019-12-01T23:08:17+00:00"
         },
         {
             "name": "atk4/data",
-            "version": "1.4.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atk4/data.git",
-                "reference": "073dfb1d6c205f4f1a85759b46ba024a02887b1e"
+                "reference": "d645bbe2c009f7ff0c0735d65bd9501f3b1e1424"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atk4/data/zipball/073dfb1d6c205f4f1a85759b46ba024a02887b1e",
-                "reference": "073dfb1d6c205f4f1a85759b46ba024a02887b1e",
+                "url": "https://api.github.com/repos/atk4/data/zipball/d645bbe2c009f7ff0c0735d65bd9501f3b1e1424",
+                "reference": "d645bbe2c009f7ff0c0735d65bd9501f3b1e1424",
                 "shasum": ""
             },
             "require": {
-                "atk4/core": "^1.3",
-                "atk4/dsql": "^1.2",
-                "php": ">=7.0.0"
+                "atk4/core": "dev-develop",
+                "atk4/dsql": "dev-develop",
+                "ext-intl": "*",
+                "php": ">=7.2.0"
             },
             "require-dev": {
-                "atk4/schema": "*",
+                "atk4/schema": "dev-develop",
                 "codeclimate/php-test-reporter": "*",
                 "phpunit/dbunit": ">=1.2",
                 "phpunit/phpcov": "*",
@@ -113,24 +124,24 @@
                 "query",
                 "sql"
             ],
-            "time": "2019-02-23T22:00:56+00:00"
+            "time": "2019-12-23T20:15:57+00:00"
         },
         {
             "name": "atk4/dsql",
-            "version": "1.2.6",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/atk4/dsql.git",
-                "reference": "82b39c73ef693a29d4e62fc826b4686125b298b9"
+                "reference": "7766d5523eeee07aaff34860f08d064e206941cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atk4/dsql/zipball/82b39c73ef693a29d4e62fc826b4686125b298b9",
-                "reference": "82b39c73ef693a29d4e62fc826b4686125b298b9",
+                "url": "https://api.github.com/repos/atk4/dsql/zipball/7766d5523eeee07aaff34860f08d064e206941cb",
+                "reference": "7766d5523eeee07aaff34860f08d064e206941cb",
                 "shasum": ""
             },
             "require": {
-                "atk4/core": "^1.3",
+                "atk4/core": "dev-develop",
                 "php": ">=5.6.0"
             },
             "require-dev": {
@@ -167,26 +178,87 @@
                 "orm",
                 "sql"
             ],
-            "time": "2019-02-04T13:45:00+00:00"
+            "time": "2019-12-10T22:18:49+00:00"
         },
         {
-            "name": "atk4/ui",
-            "version": "1.7.1",
+            "name": "atk4/schema",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "https://github.com/atk4/ui.git",
-                "reference": "1ca8f16ab7e4a499e9e25690eb237ab4be82940c"
+                "url": "https://github.com/atk4/schema.git",
+                "reference": "a43075334ada3c81b93af59b78d642442220cc71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/atk4/ui/zipball/1ca8f16ab7e4a499e9e25690eb237ab4be82940c",
-                "reference": "1ca8f16ab7e4a499e9e25690eb237ab4be82940c",
+                "url": "https://api.github.com/repos/atk4/schema/zipball/a43075334ada3c81b93af59b78d642442220cc71",
+                "reference": "a43075334ada3c81b93af59b78d642442220cc71",
                 "shasum": ""
             },
             "require": {
-                "atk4/core": "<2",
-                "atk4/data": "<2",
-                "php": ">=5.6.0"
+                "atk4/dsql": "dev-develop",
+                "php": ">=7.2.0"
+            },
+            "require-dev": {
+                "atk4/data": "dev-develop",
+                "atk4/ui": "dev-develop",
+                "codeclimate/php-test-reporter": "*",
+                "phpunit/dbunit": ">=1.2",
+                "phpunit/phpcov": "*",
+                "phpunit/phpunit": "<6"
+            },
+            "suggest": {
+                "atk4/data": "*",
+                "atk4/ui": "*",
+                "jdorn/sql-formatter": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "atk4\\schema\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Romans Malinovskis",
+                    "email": "romans@agiletoolkit.org",
+                    "homepage": "https://nearly.guru/"
+                }
+            ],
+            "description": "Agile Schema",
+            "homepage": "http://github.com/atk4/schema",
+            "keywords": [
+                "Agile",
+                "alter",
+                "data",
+                "framework",
+                "migration",
+                "schema",
+                "sql"
+            ],
+            "time": "2019-12-02T03:07:03+00:00"
+        },
+        {
+            "name": "atk4/ui",
+            "version": "dev-develop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/atk4/ui.git",
+                "reference": "c9e85c091ba3f6ca7afcd84f5bb9c52052e50581"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/atk4/ui/zipball/c9e85c091ba3f6ca7afcd84f5bb9c52052e50581",
+                "reference": "c9e85c091ba3f6ca7afcd84f5bb9c52052e50581",
+                "shasum": ""
+            },
+            "require": {
+                "atk4/data": "dev-develop",
+                "ext-json": "*",
+                "php": ">=7.2.0"
             },
             "require-dev": {
                 "behat/behat": "^3.4",
@@ -194,8 +266,10 @@
                 "behat/mink-selenium2-driver": "^1.3",
                 "codeclimate/php-test-reporter": "*",
                 "fzaninotto/faker": "*",
+                "guzzlehttp/guzzle": "^6.3",
                 "phpunit/phpcov": "^3.0",
-                "phpunit/phpunit": "<6"
+                "phpunit/phpunit": "<6",
+                "symfony/process": "^4.3"
             },
             "type": "library",
             "autoload": {
@@ -229,7 +303,7 @@
                 "web",
                 "widget"
             ],
-            "time": "2019-06-12T01:56:02+00:00"
+            "time": "2019-12-26T09:10:45+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -478,18 +552,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/x-systems/epesi-core.git",
-                "reference": "9b6cf0b7e9fe451e63980f3b9f7384f5271144e6"
+                "reference": "851d12eead4aecab1bfdb10e9520b474d31e95a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/x-systems/epesi-core/zipball/9b6cf0b7e9fe451e63980f3b9f7384f5271144e6",
-                "reference": "9b6cf0b7e9fe451e63980f3b9f7384f5271144e6",
+                "url": "https://api.github.com/repos/x-systems/epesi-core/zipball/851d12eead4aecab1bfdb10e9520b474d31e95a6",
+                "reference": "851d12eead4aecab1bfdb10e9520b474d31e95a6",
                 "shasum": ""
             },
             "require": {
                 "atk4/core": "dev-develop",
                 "atk4/data": "dev-develop",
                 "atk4/dsql": "dev-develop",
+                "atk4/schema": "dev-develop",
                 "atk4/ui": "dev-develop",
                 "joedixon/laravel-translation": "^1.0",
                 "laravel/framework": "5.8.*",
@@ -543,7 +618,7 @@
                 "laravel",
                 "package"
             ],
-            "time": "2019-11-21T14:39:21+00:00"
+            "time": "2019-12-31T08:47:45+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -1121,33 +1196,34 @@
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.5.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "2ba2586380f8d2b44ad1b9feb61c371020b27793"
+                "reference": "77f7c4d2e65413aff5b5a8cc8b3caf7a28d81959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/2ba2586380f8d2b44ad1b9feb61c371020b27793",
-                "reference": "2ba2586380f8d2b44ad1b9feb61c371020b27793",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/77f7c4d2e65413aff5b5a8cc8b3caf7a28d81959",
+                "reference": "77f7c4d2e65413aff5b5a8cc8b3caf7a28d81959",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^5.5.9 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.7|^5.0"
+                "bamarni/composer-bin-plugin": "^1.3",
+                "phpunit/phpunit": "^4.8.35 || ^5.0 || ^6.0 || ^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5-dev"
+                    "dev-master": "1.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "PhpOption\\": "src/"
+                "psr-4": {
+                    "PhpOption\\": "src/PhpOption/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1158,6 +1234,10 @@
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com"
+                },
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com"
                 }
             ],
             "description": "Option Type for PHP",
@@ -1167,7 +1247,7 @@
                 "php",
                 "type"
             ],
-            "time": "2019-11-06T22:27:00+00:00"
+            "time": "2019-12-15T19:35:24+00:00"
         },
         {
             "name": "psr/container",
@@ -1220,16 +1300,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
+                "reference": "5628725d0e4d687e29575eb41f9d5ee7de33a84c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
-                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/5628725d0e4d687e29575eb41f9d5ee7de33a84c",
+                "reference": "5628725d0e4d687e29575eb41f9d5ee7de33a84c",
                 "shasum": ""
             },
             "require": {
@@ -1263,7 +1343,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2019-11-01T11:05:21+00:00"
+            "time": "2019-11-12T16:45:05+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -1602,25 +1682,25 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v4.3.8",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "f4b3ff6a549d9ed28b2b0ecd1781bf67cf220ee9"
+                "reference": "142a0be470f2036fea3c023ff975a3071140af7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/f4b3ff6a549d9ed28b2b0ecd1781bf67cf220ee9",
-                "reference": "f4b3ff6a549d9ed28b2b0ecd1781bf67cf220ee9",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/142a0be470f2036fea3c023ff975a3071140af7e",
+                "reference": "142a0be470f2036fea3c023ff975a3071140af7e",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3"
+                "php": "^7.2.5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3-dev"
+                    "dev-master": "5.1-dev"
                 }
             },
             "autoload": {
@@ -1651,7 +1731,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
-            "time": "2019-10-02T08:36:26+00:00"
+            "time": "2019-11-21T07:02:52+00:00"
         },
         {
             "name": "symfony/debug",
@@ -2094,16 +2174,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.12.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "550ebaac289296ce228a706d0867afc34687e3f4"
+                "reference": "f8f0b461be3385e56d6de3dbb5a0df24c0c275e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/550ebaac289296ce228a706d0867afc34687e3f4",
-                "reference": "550ebaac289296ce228a706d0867afc34687e3f4",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/f8f0b461be3385e56d6de3dbb5a0df24c0c275e3",
+                "reference": "f8f0b461be3385e56d6de3dbb5a0df24c0c275e3",
                 "shasum": ""
             },
             "require": {
@@ -2115,7 +2195,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -2148,7 +2228,7 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2019-08-06T08:03:45+00:00"
+            "time": "2019-11-27T13:56:44+00:00"
         },
         {
             "name": "symfony/polyfill-iconv",
@@ -2886,7 +2966,7 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v3.6.0",
+            "version": "3.6.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
@@ -3001,16 +3081,16 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "v1.9.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "27a216cbe72327b2d6369fab721a5843be71e57d"
+                "reference": "7a6797dce9b07e4a0b6d3862227984fb080339b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/27a216cbe72327b2d6369fab721a5843be71e57d",
-                "reference": "27a216cbe72327b2d6369fab721a5843be71e57d",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/7a6797dce9b07e4a0b6d3862227984fb080339b8",
+                "reference": "7a6797dce9b07e4a0b6d3862227984fb080339b8",
                 "shasum": ""
             },
             "require": {
@@ -3023,7 +3103,9 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": []
+                "branch-alias": {
+                    "dev-master": "1.9-dev"
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -3045,7 +3127,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2019-11-14T13:13:06+00:00"
+            "time": "2019-12-17T13:52:41+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -3260,16 +3342,16 @@
         },
         {
             "name": "orchestra/testbench-core",
-            "version": "v3.8.7",
+            "version": "3.8.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench-core.git",
-                "reference": "2122fc0c3c4e592ab142786b27d5bd6c60ca7a3c"
+                "reference": "fd3436e12ad61547f83a77384679efeaae1aaede"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/2122fc0c3c4e592ab142786b27d5bd6c60ca7a3c",
-                "reference": "2122fc0c3c4e592ab142786b27d5bd6c60ca7a3c",
+                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/fd3436e12ad61547f83a77384679efeaae1aaede",
+                "reference": "fd3436e12ad61547f83a77384679efeaae1aaede",
                 "shasum": ""
             },
             "require": {
@@ -3321,7 +3403,7 @@
                 "orchestral",
                 "testing"
             ],
-            "time": "2019-09-11T07:07:58+00:00"
+            "time": "2019-12-10T02:49:57+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -4680,7 +4762,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "epesi/core": 20
     },
