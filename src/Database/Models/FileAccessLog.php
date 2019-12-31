@@ -14,8 +14,8 @@ class FileAccessLog extends Model {
     	
     	$this->addFields([
     			'file_id',
-    			['accessed_at', 'caption' => __('Accessed At')],
-    			['action', 'caption' => __('Action')],
+    			['accessed_at', 'caption' => __('Accessed At'), 'type' => 'datetime'],
+    			['action', 'caption' => __('Action'), 'type' => 'enum', 'values' => ['download' => __('Download'), 'preview' => __('Preview'), 'inline' => __('Inline')]],
     			['ip_address', 'caption' => __('IP Address')],
     			['host_name', 'caption' => __('Host Name')]
     	]);
