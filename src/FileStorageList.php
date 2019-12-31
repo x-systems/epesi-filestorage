@@ -37,7 +37,7 @@ class FileStorageList extends ModuleView
 		$grid->setModel(File::create(['read_only' => true]));
 		
 		$grid->addDecorator('name', ['Multiformat', function($row, $column) {
-			return [['Template', '<a href="#" class="file-modal" data-id="' . $row['id'] . '">' . $row[$column]  . '</a>']];
+			return [['Template', $this->app->getTag('a', ['href' => '#', 'class'=>'file-modal'], $row[$column])]];
 		}]);
 
 		$grid->on('click', '.file-modal', $this->add(new FileModal())->show());

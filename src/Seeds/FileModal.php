@@ -32,7 +32,7 @@ class FileModal extends Modal
 	public function show($args = [])
 	{
 		return parent::show(array_merge([
-				'id' => new jsExpression('$(this).data("id")')
+				'id' => new jsExpression('$(this).closest("tr").data("id")')
 		], $args));
 	}
 }
