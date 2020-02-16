@@ -10,7 +10,7 @@ class FileStorageController extends Controller
     public function get(Request $request)
     {
     	try {
-    		$file = Database\Models\File::retrieve($request->get('id'));
+    		$file = Models\File::retrieve($request->get('id'));
     	} catch (\Exception $e) {
     		abort(404);
     	}

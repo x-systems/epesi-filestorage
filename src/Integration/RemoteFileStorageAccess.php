@@ -2,7 +2,7 @@
 
 namespace Epesi\FileStorage\Integration;
 
-use Epesi\FileStorage\Database\Models\FileRemoteAccess;
+use Epesi\FileStorage\Models\FileRemoteAccess;
 
 class RemoteFileStorageAccess extends Joints\FileStorageAccessJoint
 {

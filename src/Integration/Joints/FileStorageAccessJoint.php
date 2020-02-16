@@ -2,7 +2,7 @@
 
 namespace Epesi\FileStorage\Integration\Joints;
 
-use Epesi\Core\System\Integration\Modules\ModuleJoint;
+use Epesi\Core\System\Modules\ModuleJoint;
 use Illuminate\Support\Facades\Auth;
 
 abstract class FileStorageAccessJoint extends ModuleJoint

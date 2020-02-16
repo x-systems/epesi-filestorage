@@ -1,13 +1,16 @@
 <?php
 
-namespace Epesi\FileStorage\Database\Models;
+namespace Epesi\FileStorage\Models;
 
 use Illuminate\Support\Facades\Storage;
-use Epesi\Core\Data\Model;
+use atk4\data\Model;
+use Epesi\Core\Data\HasEpesiConnection;
 
 class WriteError extends \Exception {}
 
-class FileContent extends Model {
+class FileContent extends Model
+{
+    use HasEpesiConnection;
     
 	const HASH_METHOD = 'sha512';
 

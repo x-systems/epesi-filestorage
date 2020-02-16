@@ -2,11 +2,11 @@
 
 namespace Epesi\FileStorage;
 
-use Epesi\Core\System\Integration\Modules\ModuleView;
+use Epesi\Core\System\Modules\ModuleView;
 use Illuminate\Support\Facades\Auth;
 use Epesi\FileStorage\Seeds\FileModal;
 use Epesi\Core\Layout\Seeds\ActionBar;
-use Epesi\FileStorage\Database\Models\File;
+use Epesi\FileStorage\Models\File;
 
 class FileStorageList extends ModuleView
 {

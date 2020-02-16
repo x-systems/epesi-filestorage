@@ -2,7 +2,7 @@
 
 namespace Epesi\FileStorage;
 
-use Epesi\Core\System\Integration\Modules\ModuleCore;
+use Epesi\Core\System\Modules\ModuleCore;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -31,6 +31,11 @@ class FileStorageCore extends ModuleCore
 	
 	public function install()
 	{
+	    Models\File::migrate();
+	    Models\FileAccessLog::migrate();
+	    Models\FileContent::migrate();
+	    Models\FileRemoteAccess::migrate();
+	    
 		$downloadFiles = Permission::create(['name' => 'download files']);
 		
 		Role::findByName('Admin')->givePermissionTo($downloadFiles);

@@ -4,7 +4,7 @@ namespace Epesi\FileStorage\Seeds;
 
 use atk4\ui\Lister;
 use Epesi\Core\Helpers\Utils;
-use Epesi\FileStorage\Database\Models\File;
+use Epesi\FileStorage\Models\File;
 
 class FileDetailsLister extends Lister
 {

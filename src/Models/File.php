@@ -1,9 +1,10 @@
 <?php
 
-namespace Epesi\FileStorage\Database\Models;
+namespace Epesi\FileStorage\Models;
 
 use Illuminate\Support\Facades\Auth;
-use Epesi\Core\Data\Model;
+use atk4\data\Model;
+use Epesi\Core\Data\HasEpesiConnection;
 use Epesi\Core\System\User\Database\Models\atk4\User;
 
 class LinkNotFound extends \Exception {}
@@ -12,15 +13,17 @@ class FileNotFound extends \Exception {}
 
 class File extends Model
 {
+    use HasEpesiConnection;
+    
 	public $table = 'filestorage_files';
 
     function init() {
     	parent::init();
     	
     	$this->addFields([
-    			['created_at', 'caption' => __('Stored At')],
-    			['name', 'caption' => __('File Name')],
-    			['link', 'caption' => __('Link')],
+    	        'created_at' => ['caption' => __('Stored At')],
+    			'name' => ['caption' => __('File Name')],
+    			'link' => ['caption' => __('Link')],
     			'backref'
     	]);
     	    	

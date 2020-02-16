@@ -3,10 +3,10 @@
 namespace Epesi\FileStorage\Seeds;
 
 use atk4\ui\jsExpression;
-use Epesi\FileStorage\Database\Models\FileRemoteAccess;
+use Epesi\FileStorage\Models\FileRemoteAccess;
 use Epesi\FileStorage\Integration\Joints\FileStorageAccessJoint;
 use atk4\ui\View;
-use Epesi\FileStorage\Database\Models\File;
+use Epesi\FileStorage\Models\File;
 
 class FileView extends View
 {

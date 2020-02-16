@@ -1,12 +1,16 @@
 <?php
 
-namespace Epesi\FileStorage\Database\Models;
+namespace Epesi\FileStorage\Models;
 
 use Illuminate\Support\Facades\Auth;
-use Epesi\Core\Data\Model;
+use atk4\data\Model;
+use Epesi\Core\Data\HasEpesiConnection;
 use Epesi\Core\System\User\Database\Models\atk4\User;
 
-class FileRemoteAccess extends Model {
+class FileRemoteAccess extends Model
+{
+    use HasEpesiConnection;
+    
     const DEFAULT_PERIOD = '1 week';
     
     public $table = 'filestorage_remote_access';
@@ -17,7 +21,7 @@ class FileRemoteAccess extends Model {
     	
     	$this->addFields([
     			'token',
-    			['expires_at', 'type' => 'datetime'],    			
+    			'expires_at' => ['type' => 'datetime'],    			
     	]);
     	
     	$this->hasOne('file_id', File::class)->addTitle(['field' => 'file', 'caption' => __('File Name')]);

@@ -23,7 +23,7 @@ class FileStorageAccess
     {
     	$ip_address = request()->ip();
 
-    	Database\Models\FileAccessLog::create()->insert([
+    	Models\FileAccessLog::create()->insert([
     			'file_id' => $fileId,
     			'accessed_at' => date('Y-m-d H:i:s', $time ?: time()),
     			'accessed_by' => Auth::id() ?: 0,

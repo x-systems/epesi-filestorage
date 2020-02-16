@@ -6,13 +6,13 @@ use Orchestra\Testbench\TestCase;
 use Epesi\FileStorage\Integration\LocalFileStorageAccess;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication;
 use Epesi\Core\System\User\Database\Models\User;
-use Epesi\Core\System\Integration\Modules\ModuleJoint;
+use Epesi\Core\System\Modules\ModuleJoint;
 use Epesi\FileStorage\FileStorageCore;
 use Epesi\FileStorage\Integration\RemoteFileStorageAccess;
-use Epesi\FileStorage\Database\Models\File;
-use Epesi\FileStorage\Database\Models\FileAccessLog;
-use Epesi\FileStorage\Database\Models\FileRemoteAccess;
-use Epesi\FileStorage\Database\Models\FileContent;
+use Epesi\FileStorage\Models\File;
+use Epesi\FileStorage\Models\FileAccessLog;
+use Epesi\FileStorage\Models\FileRemoteAccess;
+use Epesi\FileStorage\Models\FileContent;
 
 class FileStorageTest extends TestCase
 {
@@ -36,7 +36,10 @@ class FileStorageTest extends TestCase
 		
 		$this->loadLaravelMigrations();
 		
-		$this->loadMigrationsFrom(__DIR__ . '../../src/Database/Migrations');
+		File::migrate();
+		FileAccessLog::migrate();
+		FileContent::migrate();
+		FileRemoteAccess::migrate();
 		
 		FileStorageCore::boot();
 	}
