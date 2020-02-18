@@ -19,7 +19,7 @@ class FileStorageList extends ModuleView
 	
 	public function body()
 	{	
-		ActionBar::addButton('back')->link(url('view/system'));
+		ActionBar::addItemButton('back')->link(url('view/system'));
 		
 		$grid = $this->add([
 				'CRUD',

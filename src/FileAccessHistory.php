@@ -6,7 +6,6 @@ use Epesi\Core\System\Modules\ModuleView;
 use Epesi\FileStorage\Seeds\FileView;
 use Epesi\Core\Layout\Seeds\ActionBar;
 use Epesi\FileStorage\Models\FileAccessLog;
-use atk4\ui\GridFilterPlugin;
 use atk4\core\SessionTrait;
 
 class FileAccessHistory extends ModuleView
@@ -19,7 +18,7 @@ class FileAccessHistory extends ModuleView
 	
 	public function body()
 	{
-		ActionBar::addButton('back')->link(url()->previous());
+		ActionBar::addItemButton('back')->link(url()->previous());
 		
 		$this->fileId = $this->stickyGet('id', $this->recall('fileId'));
 		
@@ -41,7 +40,8 @@ class FileAccessHistory extends ModuleView
 				'CRUD',
 				'quickSearch' => [
 						'accessed_by_user', 'action', 'ip_address', 'host_name'
-				]
+				],
+		        'ipp' => 10
 		]);
 
 		$grid->addItemsPerPageSelector([10, 25, 50, 100], __('Items per page') . ':');
