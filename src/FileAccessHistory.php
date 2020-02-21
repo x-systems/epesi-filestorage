@@ -45,8 +45,6 @@ class FileAccessHistory extends ModuleView
 		]);
 
 		$grid->addItemsPerPageSelector([10, 25, 50, 100], __('Items per page') . ':');
-		
-		$grid->setModel(FileAccessLog::create(['read_only' => true])->addCondition('file_id', $this->stickyGet('id'))->setOrder('accessed_at desc'));
 
 		$grid->setModel(FileAccessLog::create(['read_only' => true])->addCondition('file_id', $this->fileId)->setOrder('accessed_at', 'desc'));
 
