@@ -31,7 +31,8 @@ class FileStorageList extends ModuleView
 				],
 				'quickSearch' => [
 						'name', 'created_by_user',
-				]
+				],
+		        'menu' => ActionBar::instance(),
 		]);
 
 		$grid->setModel(File::create(['read_only' => true]));
