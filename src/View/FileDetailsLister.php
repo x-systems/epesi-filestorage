@@ -1,6 +1,6 @@
 <?php
 
-namespace Epesi\FileStorage\Seeds;
+namespace Epesi\FileStorage\View;
 
 use atk4\ui\Lister;
 use Epesi\Core\Helpers\Utils;

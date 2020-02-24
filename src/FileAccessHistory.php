@@ -3,8 +3,8 @@
 namespace Epesi\FileStorage;
 
 use Epesi\Core\System\Modules\ModuleView;
-use Epesi\FileStorage\Seeds\FileView;
-use Epesi\Core\Layout\Seeds\ActionBar;
+use Epesi\FileStorage\View\FileView;
+use Epesi\Core\Layout\View\ActionBar;
 use Epesi\FileStorage\Models\FileAccessLog;
 use atk4\core\SessionTrait;
 
